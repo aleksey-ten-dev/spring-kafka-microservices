@@ -7,15 +7,25 @@ import org.springframework.stereotype.Service;
 import ru.alexey_ten.common.kafka.UserEvent;
 import ru.alexey_ten.notification_service.service.EmailService;
 
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaNotificationListener {
 
     private final EmailService emailService;
+    private final Set<UUID> processedMessages = ConcurrentHashMap.newKeySet();
 
     @KafkaListener(topics = "user-events", groupId = "notification-group")
     public void listen(UserEvent event) {
+        if (!processedMessages.add(event.getId())) {
+            log.warn("Duplicate event detected: {}", event.getId());
+            return;
+        }
+
         log.info("Received user event {}", event);
 
         switch (event.getOperation()) {

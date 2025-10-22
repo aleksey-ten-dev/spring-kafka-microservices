@@ -6,6 +6,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import ru.alexey_ten.common.kafka.UserEvent;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class UserEventProducer {
@@ -16,6 +18,9 @@ public class UserEventProducer {
     private String topic;
 
     public void sendUserEvent(UserEvent event) {
+        if (event.getId() == null) {
+            event.setId(UUID.randomUUID());
+        }
         kafkaTemplate.send(topic, event);
     }
 }

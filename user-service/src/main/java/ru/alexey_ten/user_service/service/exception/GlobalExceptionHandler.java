@@ -21,6 +21,16 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidEmail(InvalidEmailException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 400,
+                "error", "Invalid Email",
+                "message", ex.getMessage()
+        ));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(

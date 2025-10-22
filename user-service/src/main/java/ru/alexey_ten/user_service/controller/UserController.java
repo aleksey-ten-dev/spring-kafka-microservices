@@ -1,8 +1,10 @@
 package ru.alexey_ten.user_service.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.alexey_ten.user_service.dto.UserRequest;
 import ru.alexey_ten.user_service.model.User;
 import ru.alexey_ten.user_service.service.UserService;
 
@@ -14,8 +16,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public ResponseEntity<User> create(@Valid @RequestBody UserRequest request) {
+        return ResponseEntity.ok(userService.createUser(
+                new User(null, request.getName(), request.getEmail())
+        ));
     }
 
     @GetMapping("/{id}")
@@ -24,8 +28,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(id, user));
+    public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(
+                id, new User(null, request.getName(), request.getEmail())
+        ));
     }
 
     @DeleteMapping("/{id}")

@@ -3,8 +3,8 @@ package ru.alexey_ten.user_service.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.alexey_ten.common.kafka.UserEvent;
 import ru.alexey_ten.user_service.kafka.UserEventProducer;
+import ru.alexey_ten.user_service.mapper.UserEventMapper;
 import ru.alexey_ten.user_service.model.User;
 import ru.alexey_ten.user_service.repository.UserRepository;
 import ru.alexey_ten.user_service.service.exception.UserNotFoundException;
@@ -16,10 +16,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserEventProducer userEventProducer;
+    private final UserEventMapper eventMapper;
 
     public User createUser(User user) {
         User savedUser = userRepository.save(user);
-        userEventProducer.sendUserEvent(new UserEvent("CREATE", savedUser.getEmail(), savedUser.getName()));
+        userEventProducer.sendUserEvent(eventMapper.toEvent(savedUser, "CREATE"));
         log.info("User created: {}", savedUser);
 
         return savedUser;
@@ -37,16 +38,16 @@ public class UserService {
         user.setEmail(userDetails.getEmail());
 
         User updatedUser = userRepository.save(user);
-        userEventProducer.sendUserEvent(new UserEvent("UPDATE", updatedUser.getName(), updatedUser.getName()));
+        userEventProducer.sendUserEvent(eventMapper.toEvent(updatedUser, "UPDATE"));
         log.info("User updated: {}", updatedUser);
 
         return updatedUser;
     }
 
     public void deleteUser(Long id) {
-        userRepository.findById(id).ifPresent( user -> {
+        userRepository.findById(id).ifPresent(user -> {
             userRepository.delete(user);
-            userEventProducer.sendUserEvent(new UserEvent("DELETE", user.getEmail(), user.getName()));
+            userEventProducer.sendUserEvent(eventMapper.toEvent(user, "DELETE"));
             log.info("User deleted: {}", user);
         });
     }
