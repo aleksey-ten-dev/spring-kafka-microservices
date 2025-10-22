@@ -7,6 +7,7 @@ import ru.alexey_ten.user_service.kafka.UserEventProducer;
 import ru.alexey_ten.user_service.mapper.UserEventMapper;
 import ru.alexey_ten.user_service.model.User;
 import ru.alexey_ten.user_service.repository.UserRepository;
+import ru.alexey_ten.user_service.service.exception.UserAlreadyExistsException;
 import ru.alexey_ten.user_service.service.exception.UserNotFoundException;
 
 @Service
@@ -19,6 +20,11 @@ public class UserService {
     private final UserEventMapper eventMapper;
 
     public User createUser(User user) {
+        userRepository.findByEmail(user.getEmail())
+                .ifPresent(existingUser -> {
+                    throw new UserAlreadyExistsException(existingUser.getEmail());
+                });
+
         User savedUser = userRepository.save(user);
         userEventProducer.sendUserEvent(eventMapper.toEvent(savedUser, "CREATE"));
         log.info("User created: {}", savedUser);
