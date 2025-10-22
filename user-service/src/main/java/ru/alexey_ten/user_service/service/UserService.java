@@ -15,8 +15,8 @@ import ru.alexey_ten.user_service.service.exception.UserNotFoundException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserEventProducer userEventProducer;
     private final UserEventMapper eventMapper;
+    private final UserEventProducer userEventProducer;
 
     public User createUser(User user) {
         User savedUser = userRepository.save(user);
