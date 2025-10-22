@@ -1,0 +1,5 @@
+ru\alexey_ten\notification_service\service\EmailService.class
+ru\alexey_ten\notification_service\kafka\KafkaNotificationListener.class
+ru\alexey_ten\notification_service\service\MockEmailService.class
+ru\alexey_ten\notification_service\NotificationServiceApplication.class
+ru\alexey_ten\notification_service\service\RealEmailService.class

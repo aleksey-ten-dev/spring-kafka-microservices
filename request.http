@@ -1,0 +1,16 @@
+### GET запрос
+GET http://localhost:8081/users/1
+Accept: application/json
+
+### POST запрос
+POST http://localhost:8081/users
+Content-Type: application/json
+
+{
+  "name": "Alexey",
+  "email": "aleksey-ten-developer@yandex.ru"
+}
+
+### DELETE запрос
+DELETE http://localhost:8081/users/1
+Content-Type: application/json

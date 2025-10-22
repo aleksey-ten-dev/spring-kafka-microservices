@@ -1,0 +1,21 @@
+spring:
+  main:
+    web-application-type: none
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+kafka:
+  bootstrap-servers: localhost:9094
+  consumer:
+    auto-startup: false
+
+logging:
+  level:
+    ru.alexey_ten: DEBUG

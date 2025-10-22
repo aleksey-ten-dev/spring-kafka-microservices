@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: notification-service
+  mail:
+    host: smtp.mail.ru
+    port: 465
+    username: dondonnybot@mail.ru
+    password: NhDLOzyrujR7yn41AriM
+    protocol: smtp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: false
+      mail.smtp.ssl.enable: true
+      mail.debug: true
+
+  kafka:
+    bootstrap-servers: kafka:9093
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "ru.alexey_ten.common.kafka"
+        spring.json.value.default.type: "ru.alexey_ten.common.kafka.UserEvent"
+    properties:
+      session.timeout.ms: 10000
+      request.timeout.ms: 15000
+      heartbeat.interval.ms: 3000
