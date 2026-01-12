@@ -11,6 +11,15 @@ Content-Type: application/json
   "email": "aleksey-ten-developer@yandex.ru"
 }
 
+### POST invalid email
+POST http://localhost:8081/users
+Content-Type: application/json
+
+{
+  "name": "Alexey1",
+  "email": "amail"
+}
+
 ### DELETE запрос
-DELETE http://localhost:8081/users/1
+DELETE http://localhost:8081/users/4
 Content-Type: application/json
